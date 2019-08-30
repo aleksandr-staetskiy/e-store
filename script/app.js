@@ -2,20 +2,24 @@
 
 // checkbox
 
-const checkbox = document.querySelectorAll('#discount-checkbox');
+function toogleCheckbox() {
+  const checkbox = document.querySelectorAll('#discount-checkbox');
 
-checkbox.forEach( function(item) {
-  item.addEventListener( 'click', function() {
-    if (this.checked) {
-      this.nextElementSibling.classList.add('checked');
-    } else {
-      this.nextElementSibling.classList.remove('checked');
-    }
-    
+  checkbox.forEach( function(item) {
+    item.addEventListener( 'click', function() {
+      if (this.checked) {
+        this.nextElementSibling.classList.add('checked');
+      } else {
+        this.nextElementSibling.classList.remove('checked');
+      }
+      
+    })
   })
-})
+}
 
 // cart
+
+function toggleCart() {
 
 const cartButton = document.querySelector('#cart');
 const cartWindow = document.querySelector('.cart');
@@ -31,51 +35,77 @@ cartClose.addEventListener( 'click', () => {
   document.body.style.overflow = '';
 })
 
+}
+
+
 
 // add to cart
 
-const goodsCard = document.querySelectorAll('.goods .card');
-const cartInner = document.querySelector('.cart-wrapper');
-const cartStatus = document.querySelector('#cart-empty');
-let cartCounter = document.querySelector('.counter');
+function addToCart() {
+  const goodsCard = document.querySelectorAll('.goods .card');
+  const cartInner = document.querySelector('.cart-wrapper');
+  const cartStatus = document.querySelector('#cart-empty');
+  let cartCounter = document.querySelector('.counter');
 
-goodsCard.forEach( (card) => {
-  let addToCartButton = card.querySelector('.btn')
-  addToCartButton.addEventListener( 'click', () => {
-    let clonedCard = card.cloneNode(true);
-    cartInner.appendChild(clonedCard)
-    showData();
+  goodsCard.forEach( (card) => {
+    let addToCartButton = card.querySelector('.btn')
 
-    const removeBtn = clonedCard.querySelector('.btn');
-    removeBtn.innerHTML = "удалть из корзины"
-    removeBtn.addEventListener( 'click', () => {
-      clonedCard.remove();
+    addToCartButton.addEventListener( 'click', () => {
+      let clonedCard = card.cloneNode(true);
+      cartInner.appendChild(clonedCard)
       showData();
+
+      const removeBtn = clonedCard.querySelector('.btn');
+      removeBtn.innerHTML = "удалть из корзины"
+      removeBtn.addEventListener( 'click', () => {
+        clonedCard.remove();
+        showData();
+      })
     })
   })
-})
 
-function showData() {
-  let cardsInCart = cartInner.querySelectorAll('.card');
-  cartCounter.innerHTML = cardsInCart.length
-  const cartTotal = document.querySelector('.cart-total span');
-  let cardPrice = cartInner.querySelectorAll('.card-price');
-  let sum = 0;
+  function showData() {
+    let cardsInCart = cartInner.querySelectorAll('.card');
+    cartCounter.innerHTML = cardsInCart.length
+    const cartTotal = document.querySelector('.cart-total span');
+    let cardPrice = cartInner.querySelectorAll('.card-price');
+    let sum = 0;
+    
+    cardPrice.forEach( (elem) => {
+     let price = parseFloat(elem.textContent);
+     sum += price;
+    })
   
-  cardPrice.forEach( (elem) => {
-   let price = parseFloat(elem.textContent);
-   sum += price;
-  })
-
-  cartTotal.innerHTML = sum;
-
-  if (cardsInCart.length !== 0) {
-    cartStatus.remove();
-  } else {
-    cartInner.appendChild(cartStatus);
+    cartTotal.innerHTML = sum;
+  
+    if (cardsInCart.length !== 0) {
+      cartStatus.remove();
+    } else {
+      cartInner.appendChild(cartStatus);
+    }
   }
+
 }
 
+
+
+function Filter() {
+  const cards = document.querySelectorAll('.goods .card');
+  const saleCheckbox = document.getElementById('discount-checkbox');
+
+  saleCheckbox.addEventListener( 'click', () => {
+    cards.forEach( (card) => {
+      if (!card.classList.contains('card-sale') ) {
+        card.remove();
+      }
+    })
+  })
+}
+
+toogleCheckbox();
+toggleCart();
+addToCart();
+Filter();
 
 
 
