@@ -37,22 +37,51 @@ cartClose.addEventListener( 'click', () => {
 const goodsCard = document.querySelectorAll('.goods .card');
 const cartInner = document.querySelector('.cart-wrapper');
 const cartStatus = document.querySelector('#cart-empty');
+let cartCounter = document.querySelector('.counter');
 
 goodsCard.forEach( (card) => {
   let addToCartButton = card.querySelector('.btn')
   addToCartButton.addEventListener( 'click', () => {
     let clonedCard = card.cloneNode(true);
     cartInner.appendChild(clonedCard)
-    cartStatus.remove();
-    cartLength();
+    showData();
+
+    const removeBtn = clonedCard.querySelector('.btn');
+    removeBtn.innerHTML = "удалть из корзины"
+    removeBtn.addEventListener( 'click', () => {
+      clonedCard.remove();
+      showData();
+    })
   })
 })
 
-function cartLength() {
-  let cartCounter = document.querySelector('.counter');
-  let amountCardsInCart = document.querySelectorAll('.cart-wrapper .card')
-  cartCounter.innerHTML = amountCardsInCart.length
+function showData() {
+  let cardsInCart = cartInner.querySelectorAll('.card');
+  cartCounter.innerHTML = cardsInCart.length
+  const cartTotal = document.querySelector('.cart-total span');
+  let cardPrice = cartInner.querySelectorAll('.card-price');
+  let sum = 0;
+  
+  cardPrice.forEach( (elem) => {
+   let price = parseFloat(elem.textContent);
+   sum += price;
+  })
+
+  cartTotal.innerHTML = sum;
+
+  if (cardsInCart.length !== 0) {
+    cartStatus.remove();
+  } else {
+    cartInner.appendChild(cartStatus);
+  }
 }
+
+
+
+
+
+
+
 
 
 
